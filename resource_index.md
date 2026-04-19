@@ -147,7 +147,7 @@
 2. Awesome Humanoid Robot Learning：<https://github.com/YanjieZe/awesome-humanoid-robot-learning>
 3. Awesome Video Robotic Papers：<https://github.com/H-Freax/Awesome-Video-Robotic-Papers>
 
-## 11. 按24个月阶段选资源（与计划.md对齐）
+## 11. 按24个月阶段选资源（与roadmap.md对齐）
 
 ### M1-M3（基础重建）
 

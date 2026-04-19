@@ -180,4 +180,4 @@
 
 ## 8. 配套资源
 
-详细资源见 [资源索引.md](资源索引.md)。
+详细资源见 [resource_index.md](resource_index.md)。

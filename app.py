@@ -11,9 +11,62 @@ from tkinter.scrolledtext import ScrolledText
 
 
 BASE_DIR = Path(__file__).resolve().parent
-MONTH_DIR = BASE_DIR / "月计划"
+MONTH_DIR = BASE_DIR / "monthly_plans"
 STATE_DIR = Path.home() / ".local" / "share" / "learning_schedule_planner"
 STATE_FILE = STATE_DIR / "state.json"
+
+DEFAULT_THEME = "Ocean Night"
+
+THEMES = {
+    "Ocean Night": {
+        "app_bg": "#0f172a",
+        "card_bg": "#111827",
+        "sub_bg": "#1f2937",
+        "text_main": "#f8fafc",
+        "text_muted": "#cbd5e1",
+        "accent": "#2563eb",
+        "accent_active": "#1d4ed8",
+        "doc_bg": "#111827",
+        "doc_text": "#e5e7eb",
+        "doc_h2": "#93c5fd",
+    },
+    "Forest Mint": {
+        "app_bg": "#0b1d1a",
+        "card_bg": "#102620",
+        "sub_bg": "#1a3a31",
+        "text_main": "#ecfdf5",
+        "text_muted": "#bbf7d0",
+        "accent": "#10b981",
+        "accent_active": "#059669",
+        "doc_bg": "#102620",
+        "doc_text": "#dcfce7",
+        "doc_h2": "#6ee7b7",
+    },
+    "Warm Sand": {
+        "app_bg": "#2a2118",
+        "card_bg": "#3a2d20",
+        "sub_bg": "#4a3826",
+        "text_main": "#fff7ed",
+        "text_muted": "#fed7aa",
+        "accent": "#f97316",
+        "accent_active": "#ea580c",
+        "doc_bg": "#3a2d20",
+        "doc_text": "#ffedd5",
+        "doc_h2": "#fdba74",
+    },
+    "Graphite Violet": {
+        "app_bg": "#16161d",
+        "card_bg": "#1f1f2a",
+        "sub_bg": "#2a2a37",
+        "text_main": "#f5f3ff",
+        "text_muted": "#ddd6fe",
+        "accent": "#8b5cf6",
+        "accent_active": "#7c3aed",
+        "doc_bg": "#1f1f2a",
+        "doc_text": "#ede9fe",
+        "doc_h2": "#c4b5fd",
+    },
+}
 
 TASK_HEADINGS = {"核心任务", "关键实验", "交付物", "验收标准"}
 MONTH_FILE_PATTERN = re.compile(r"^M(\d{2})\.md$")
@@ -40,7 +93,7 @@ class MonthDocument:
 class StateStore:
     def __init__(self, path: Path) -> None:
         self.path = path
-        self.data = {"version": 1, "months": {}}
+        self.data = {"version": 1, "months": {}, "settings": {"theme": DEFAULT_THEME}}
         self.load()
 
     def load(self) -> None:
@@ -48,7 +101,9 @@ class StateStore:
             try:
                 self.data = json.loads(self.path.read_text(encoding="utf-8"))
             except json.JSONDecodeError:
-                self.data = {"version": 1, "months": {}}
+                self.data = {"version": 1, "months": {}, "settings": {"theme": DEFAULT_THEME}}
+        self.data.setdefault("settings", {})
+        self.data["settings"].setdefault("theme", DEFAULT_THEME)
 
     def save(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -61,6 +116,14 @@ class StateStore:
         bucket.setdefault("custom_tasks", [])
         bucket.setdefault("note", "")
         return bucket
+
+    def get_theme(self) -> str:
+        settings = self.data.setdefault("settings", {})
+        return settings.get("theme", DEFAULT_THEME)
+
+    def set_theme(self, theme_name: str) -> None:
+        settings = self.data.setdefault("settings", {})
+        settings["theme"] = theme_name
 
 
 def discover_month_documents() -> list[MonthDocument]:
@@ -123,7 +186,7 @@ class LearningPlannerApp(Tk):
         self.store = StateStore(STATE_FILE)
         self.documents = discover_month_documents()
         if not self.documents:
-            raise RuntimeError("未找到月计划文件，请确认 月计划/M01.md 到 M24.md 已存在。")
+            raise RuntimeError("No monthly plan files found. Please ensure monthly_plans/M01.md to M24.md exist.")
 
         self.current_document: MonthDocument | None = None
         self.current_tasks: list[TaskItem] = []
@@ -134,30 +197,25 @@ class LearningPlannerApp(Tk):
         self.progress_var = StringVar(value="")
         self.status_var = StringVar(value="")
         self.task_input_var = StringVar(value="")
+        self.theme_var = StringVar(value=self.store.get_theme())
 
         self._setup_style()
         self._build_layout()
+        self._apply_theme(self.theme_var.get())
         self._bind_events()
         self._open_initial_month()
 
     def _setup_style(self) -> None:
         style = ttk.Style(self)
         style.theme_use("clam")
-        style.configure("Root.TFrame", background="#0f172a")
-        style.configure("Sidebar.TFrame", background="#111827")
-        style.configure("Main.TFrame", background="#0f172a")
-        style.configure("Card.TFrame", background="#111827", relief="flat")
-        style.configure("CardTitle.TLabel", background="#111827", foreground="#f8fafc", font=("Sans", 12, "bold"))
-        style.configure("CardText.TLabel", background="#111827", foreground="#cbd5e1", font=("Sans", 10))
-        style.configure("Sidebar.TLabel", background="#111827", foreground="#e5e7eb", font=("Sans", 10))
-        style.configure("Header.TLabel", background="#0f172a", foreground="#f8fafc", font=("Sans", 18, "bold"))
-        style.configure("SubHeader.TLabel", background="#0f172a", foreground="#cbd5e1", font=("Sans", 10))
-        style.configure("Accent.TButton", padding=(12, 8), background="#2563eb", foreground="white")
-        style.map("Accent.TButton", background=[("active", "#1d4ed8")])
+        style.configure("CardTitle.TLabel", font=("Sans", 12, "bold"))
+        style.configure("CardText.TLabel", font=("Sans", 10))
+        style.configure("Sidebar.TLabel", font=("Sans", 10))
+        style.configure("Header.TLabel", font=("Sans", 18, "bold"))
+        style.configure("SubHeader.TLabel", font=("Sans", 10))
+        style.configure("Accent.TButton", padding=(12, 8), foreground="white")
         style.configure("TButton", padding=(10, 6))
-        style.configure("TEntry", fieldbackground="#1f2937", foreground="#f8fafc", insertcolor="#f8fafc")
-        style.configure("Treeview", background="#111827", fieldbackground="#111827", foreground="#f8fafc", rowheight=28)
-        style.configure("Treeview.Heading", background="#1f2937", foreground="#e5e7eb", font=("Sans", 10, "bold"))
+        style.configure("Treeview.Heading", font=("Sans", 10, "bold"))
 
     def _build_layout(self) -> None:
         self.configure(background="#0f172a")
@@ -169,7 +227,19 @@ class LearningPlannerApp(Tk):
         header.pack(fill=X, padx=20, pady=(18, 10))
 
         ttk.Label(header, text="计划与待办面板", style="Header.TLabel").pack(anchor="w")
-        ttk.Label(header, text="直接读取月计划 Markdown，并把完成状态保存到本地。", style="SubHeader.TLabel").pack(anchor="w", pady=(4, 0))
+        ttk.Label(header, text="直接读取monthly_plans Markdown，并把完成状态保存到本地。", style="SubHeader.TLabel").pack(anchor="w", pady=(4, 0))
+
+        theme_row = ttk.Frame(header, style="Main.TFrame")
+        theme_row.pack(anchor="w", pady=(8, 0))
+        ttk.Label(theme_row, text="主题", style="SubHeader.TLabel").pack(side="left", padx=(0, 8))
+        self.theme_selector = ttk.Combobox(
+            theme_row,
+            textvariable=self.theme_var,
+            values=list(THEMES.keys()),
+            width=18,
+            state="readonly",
+        )
+        self.theme_selector.pack(side="left")
 
         body = ttk.Frame(root, style="Main.TFrame")
         body.pack(fill=BOTH, expand=True, padx=20, pady=(0, 18))
@@ -212,14 +282,14 @@ class LearningPlannerApp(Tk):
         content_card.columnconfigure(0, weight=1)
         content_card.rowconfigure(0, weight=1)
 
-        self.doc_text = ScrolledText(content_card, wrap="word", bg="#111827", fg="#e5e7eb", insertbackground="#e5e7eb", relief="flat", padx=16, pady=16)
+        self.doc_text = ScrolledText(content_card, wrap="word", relief="flat", padx=16, pady=16)
         self.doc_text.grid(row=0, column=0, sticky="nsew")
         self.doc_text.configure(state="disabled")
         self.doc_text.tag_configure("h1", font=("Sans", 18, "bold"), foreground="#f8fafc", spacing1=8, spacing3=10)
-        self.doc_text.tag_configure("h2", font=("Sans", 14, "bold"), foreground="#93c5fd", spacing1=10, spacing3=6)
-        self.doc_text.tag_configure("h3", font=("Sans", 11, "bold"), foreground="#cbd5e1", spacing1=4, spacing3=4)
-        self.doc_text.tag_configure("bullet", lmargin1=16, lmargin2=32, foreground="#cbd5e1", spacing1=2, spacing3=2)
-        self.doc_text.tag_configure("body", foreground="#e5e7eb", spacing1=2, spacing3=2)
+        self.doc_text.tag_configure("h2", font=("Sans", 14, "bold"), spacing1=10, spacing3=6)
+        self.doc_text.tag_configure("h3", font=("Sans", 11, "bold"), spacing1=4, spacing3=4)
+        self.doc_text.tag_configure("bullet", lmargin1=16, lmargin2=32, spacing1=2, spacing3=2)
+        self.doc_text.tag_configure("body", spacing1=2, spacing3=2)
 
         task_card = ttk.Frame(body, style="Card.TFrame")
         task_card.grid(row=0, column=2, sticky="nsew")
@@ -249,6 +319,42 @@ class LearningPlannerApp(Tk):
     def _bind_events(self) -> None:
         self.month_list.bind("<<TreeviewSelect>>", self._on_month_selected)
         self.bind("<Delete>", self._delete_selected_custom_task)
+        self.theme_selector.bind("<<ComboboxSelected>>", self._on_theme_changed)
+
+    def _apply_theme(self, theme_name: str) -> None:
+        colors = THEMES.get(theme_name, THEMES[DEFAULT_THEME])
+        style = ttk.Style(self)
+
+        style.configure("Root.TFrame", background=colors["app_bg"])
+        style.configure("Sidebar.TFrame", background=colors["card_bg"])
+        style.configure("Main.TFrame", background=colors["app_bg"])
+        style.configure("Card.TFrame", background=colors["card_bg"], relief="flat")
+        style.configure("CardTitle.TLabel", background=colors["card_bg"], foreground=colors["text_main"])
+        style.configure("CardText.TLabel", background=colors["card_bg"], foreground=colors["text_muted"])
+        style.configure("Sidebar.TLabel", background=colors["card_bg"], foreground=colors["doc_text"])
+        style.configure("Header.TLabel", background=colors["app_bg"], foreground=colors["text_main"])
+        style.configure("SubHeader.TLabel", background=colors["app_bg"], foreground=colors["text_muted"])
+        style.configure("Accent.TButton", background=colors["accent"], foreground="white")
+        style.map("Accent.TButton", background=[("active", colors["accent_active"])])
+        style.configure("TEntry", fieldbackground=colors["sub_bg"], foreground=colors["text_main"], insertcolor=colors["text_main"])
+        style.configure("Treeview", background=colors["card_bg"], fieldbackground=colors["card_bg"], foreground=colors["text_main"], rowheight=28)
+        style.configure("Treeview.Heading", background=colors["sub_bg"], foreground=colors["doc_text"])
+
+        self.configure(background=colors["app_bg"])
+        self.doc_text.configure(bg=colors["doc_bg"], fg=colors["doc_text"], insertbackground=colors["doc_text"])
+        self.doc_text.tag_configure("h1", foreground=colors["text_main"])
+        self.doc_text.tag_configure("h2", foreground=colors["doc_h2"])
+        self.doc_text.tag_configure("h3", foreground=colors["text_muted"])
+        self.doc_text.tag_configure("bullet", foreground=colors["text_muted"])
+        self.doc_text.tag_configure("body", foreground=colors["doc_text"])
+
+    def _on_theme_changed(self, event: object | None = None) -> None:
+        selected = self.theme_var.get()
+        if selected not in THEMES:
+            return
+        self._apply_theme(selected)
+        self.store.set_theme(selected)
+        self.store.save()
 
     def _open_initial_month(self) -> None:
         current_month = datetime.now().month

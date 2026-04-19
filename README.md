@@ -1,45 +1,47 @@
 # Learning_Schedule
 
+[English Version](README_EN.md)
+
 这是一个面向具身智能 / DRL / 控制 / ROS2 / 视觉 / VLA 的两年学习工程仓库。仓库的设计目标不是堆资料，而是把学习路线拆成可执行的阶段、月份和日常任务，保证每一步都能落到代码、实验和总结上。
 
 ## 目录结构
 
-- [学习计划大纲.md](学习计划大纲.md)：总体模块划分与占比
-- [计划.md](计划.md)：两年级别的主路线与阶段目标
-- [资源索引.md](资源索引.md)：按模块整理的资源入口与学习顺序
-- [月计划/README.md](月计划/README.md)：24 个月月计划索引
-- [月计划/M01.md](月计划/M01.md) 到 [月计划/M24.md](月计划/M24.md)：每月具体执行卡片
+- [learning_plan_outline.md](learning_plan_outline.md)：总体模块划分与占比
+- [roadmap.md](roadmap.md)：两年级别的主路线与阶段目标
+- [resource_index.md](resource_index.md)：按模块整理的资源入口与学习顺序
+- [monthly_plans/README.md](monthly_plans/README.md)：24 个月monthly_plans索引
+- [monthly_plans/M01.md](monthly_plans/M01.md) 到 [monthly_plans/M24.md](monthly_plans/M24.md)：每月具体执行卡片
 
 ## 推荐阅读顺序
 
-1. 先看 [学习计划大纲.md](学习计划大纲.md)，确认模块和权重。
-2. 再看 [计划.md](计划.md)，理解两年路线和阶段顺序。
-3. 然后看 [资源索引.md](资源索引.md)，按阶段选资源。
-4. 最后进入 [月计划/README.md](月计划/README.md)，按月执行。
+1. 先看 [learning_plan_outline.md](learning_plan_outline.md)，确认模块和权重。
+2. 再看 [roadmap.md](roadmap.md)，理解两年路线和阶段顺序。
+3. 然后看 [resource_index.md](resource_index.md)，按阶段选资源。
+4. 最后进入 [monthly_plans/README.md](monthly_plans/README.md)，按月执行。
 
 ## 执行原则
 
 - 先建立基础，再做系统，再做融合。
 - 每个月只抓一个主问题，避免任务发散。
 - 每个阶段都要有可复现实验和可展示产出。
-- 月计划文件只保留当月差异，不重复通用模板。
+- monthly_plans文件只保留当月差异，不重复通用模板。
 
 ## 当前结构特点
 
 - 大纲负责“学什么”。
 - 计划负责“先后顺序”。
 - 资源索引负责“看什么”。
-- 月计划负责“这个月具体怎么做”。
+- monthly_plans负责“这个月具体怎么做”。
 
 ## 适合的使用方式
 
-- 如果你想查看长期路线，先看 [计划.md](计划.md)。
-- 如果你想立刻开始本月任务，直接打开 [月计划/README.md](月计划/README.md)。
-- 如果你想补某个方向的基础，去 [资源索引.md](资源索引.md) 找对应模块。
+- 如果你想查看长期路线，先看 [roadmap.md](roadmap.md)。
+- 如果你想立刻开始本月任务，直接打开 [monthly_plans/README.md](monthly_plans/README.md)。
+- 如果你想补某个方向的基础，去 [resource_index.md](resource_index.md) 找对应模块。
 
 ## 阶段性开源项目验收（吸引力重设计版）
 
-下面 8 个项目按 [计划.md](计划.md) 的阶段顺序设计，形成一条连续“产品宇宙”主线：
+下面 8 个项目按 [roadmap.md](roadmap.md) 的阶段顺序设计，形成一条连续“产品宇宙”主线：
 - 前期先做可解释、可复现的小闭环（建立信任）
 - 中期做可对比、可联调的系统能力（建立技术深度）
 - 后期做可部署、可展示的应用作品集（建立职业价值）
@@ -76,11 +78,11 @@
 
 ## 本地计划软件（详细说明）
 
-应用入口是 [app.py](app.py)。这是一个面向本仓库学习计划场景的 Linux 本地桌面工具，核心目标是把月计划文档变成可执行的任务面板。
+应用入口是 [app.py](app.py)。这是一个面向本仓库学习计划场景的 Linux 本地桌面工具，核心目标是把 monthly_plans 文档变成可执行的任务面板。
 
 ### 1. 应用定位
 
-- 输入数据：月计划目录中的 Markdown 文件（默认读取 [月计划/](月计划/)）
+- 输入数据：monthly_plans 目录中的 Markdown 文件（默认读取 [monthly_plans/](monthly_plans/)）
 - 输出结果：任务完成状态、自定义待办、当月执行进度
 - 数据特点：纯本地存储，不依赖数据库和网络服务
 
@@ -145,7 +147,7 @@
 
 ### 8. 当前已实现能力
 
-- 24 个月计划自动加载
+- 24 个 monthly_plans 自动加载
 - 任务自动提取与进度统计
 - 本地状态保存与恢复
 - 深色风格桌面界面
@@ -156,7 +158,7 @@
 	检查是否在 Linux 图形会话中运行，而不是纯无头终端。
 
 2. 看不到月份列表
-	确认 [月计划/](月计划/) 下存在 M01.md 到 M24.md 文件，并且文件编码为 UTF-8。
+	确认 [monthly_plans/](monthly_plans/) 下存在 M01.md 到 M24.md 文件，并且文件编码为 UTF-8。
 
 3. 勾选状态丢失
 	检查状态文件目录是否有写权限：~/.local/share/learning_schedule_planner/
