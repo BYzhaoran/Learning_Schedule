@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "计划.md",
+                "file": "月计划/M03.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "计划"
+              "title": "M03"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "计划.md",
+                "file": "月计划/M03.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "计划 的反向链接列表"
+              "title": "M03 的反向链接列表"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "计划.md",
+                "file": "月计划/M03.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "计划 的出链列表"
+              "title": "M03 的出链列表"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "计划.md",
+                "file": "月计划/M03.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "计划 的大纲"
+              "title": "M03 的大纲"
             }
           }
         ]
@@ -185,7 +185,13 @@
   },
   "active": "6bec10458d3e63de",
   "lastOpenFiles": [
+    "月计划/M04.md",
+    "月计划/M02.md",
+    "月计划/M03.md",
+    "月计划/M01.md",
+    "计划.md",
     "README.md",
+    "Study_Note",
     "月计划/README.md",
     "月计划/M24.md",
     "月计划/M23.md",
@@ -206,11 +212,6 @@
     "月计划/M08.md",
     "月计划/M07.md",
     "月计划/M06.md",
-    "月计划/M05.md",
-    "月计划/M04.md",
-    "月计划/M03.md",
-    "月计划/M02.md",
-    "月计划/M01.md",
     "月计划"
   ]
 }
