@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "月计划/M03.md",
+                "file": "Study_Note/M1/M1_Py_Part.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "M03"
+              "title": "M1_Py_Part"
             }
           }
         ]
@@ -183,15 +183,24 @@
       "bases:新建数据库": false
     }
   },
-  "active": "6bec10458d3e63de",
+  "active": "34a80cc6ab452e7b",
   "lastOpenFiles": [
+    "Study_Note/M1/numpy_plt_reference.md",
+    "Study_Note/M1/Linear_Regression.py",
+    "Study_Note/M1/Linear Regression。py",
+    "Study_Note/M1/logistic_regression.py",
+    "Study_Note/M1",
+    "未命名.md",
+    "Study_Note/M1/M1_Py_Part.md",
+    "resource_index.md",
+    "README.md",
+    "learning_plan_outline.md",
     "app.py",
     "月计划/M04.md",
     "月计划/M02.md",
     "月计划/M03.md",
     "月计划/M01.md",
     "计划.md",
-    "README.md",
     "Study_Note",
     "月计划/README.md",
     "月计划/M24.md",
@@ -208,10 +217,6 @@
     "月计划/M13.md",
     "月计划/M12.md",
     "月计划/M11.md",
-    "月计划/M10.md",
-    "月计划/M09.md",
-    "月计划/M08.md",
-    "月计划/M07.md",
     "月计划"
   ]
 }
